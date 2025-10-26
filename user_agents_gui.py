@@ -5,6 +5,7 @@ from tkinter import ttk, filedialog, messagebox
 import ua_generator
 from datetime import datetime
 import threading
+from ua_generator.options import Options
 
 class UAGeneratorApp:
     def __init__(self, root):
@@ -13,7 +14,6 @@ class UAGeneratorApp:
         self.root.geometry("500x400")
         self.setup_icon()
         
-        # Değişken tanımları
         self.device_var = tk.StringVar(value='desktop')
         self.platform_vars = {
             'windows': tk.BooleanVar(value=True),
@@ -28,8 +28,10 @@ class UAGeneratorApp:
             'firefox': tk.BooleanVar(),
             'safari': tk.BooleanVar()
         }
+        self.client_hints_var = tk.BooleanVar(value=False)
+        self.weighted_versions_var = tk.BooleanVar(value=False)
+        self.is_random = False
         
-        # Widget'ları oluştur
         self.create_widgets()
         self.update_platform_options()
         self.device_var.trace_add('write', self.on_device_change)
@@ -46,22 +48,21 @@ class UAGeneratorApp:
         main_frame = ttk.Frame(self.root, padding=10)
         main_frame.pack(fill=tk.BOTH, expand=True)
 
-        # Device Selection
         device_frame = ttk.LabelFrame(main_frame, text="Device Type")
         device_frame.pack(fill=tk.X, pady=5, anchor='w')
         
         ttk.Radiobutton(device_frame, text="Desktop", variable=self.device_var, 
-                      value='desktop').pack(side=tk.LEFT, padx=10)
+                      value='desktop', command=self.on_device_change).pack(side=tk.LEFT, padx=10)
         ttk.Radiobutton(device_frame, text="Mobile", variable=self.device_var, 
-                      value='mobile').pack(side=tk.LEFT)
+                      value='mobile', command=self.on_device_change).pack(side=tk.LEFT, padx=10)
+        ttk.Radiobutton(device_frame, text="Random", variable=self.device_var, 
+                      value='random', command=self.on_device_change).pack(side=tk.LEFT)
 
-        # Platform Selection
         platform_frame = ttk.LabelFrame(main_frame, text="Operating System")
         platform_frame.pack(fill=tk.X, pady=5, anchor='w')
         self.platform_container = ttk.Frame(platform_frame)
         self.platform_container.pack(side=tk.LEFT)
 
-        # Browser Selection
         browser_frame = ttk.LabelFrame(main_frame, text="Supported Browsers")
         browser_frame.pack(fill=tk.X, pady=5)
         
@@ -70,7 +71,15 @@ class UAGeneratorApp:
             ttk.Checkbutton(browser_frame, variable=self.browser_vars[browser],
                           text=browser.capitalize()).pack(side=tk.LEFT, padx=10)
 
-        # File Settings
+        client_hints_frame = ttk.Frame(main_frame)
+        client_hints_frame.pack(fill=tk.X, pady=5)
+        ttk.Checkbutton(client_hints_frame, variable=self.client_hints_var,
+                      text="Include Client Hints (Sec-CH-UA fields)").pack(side=tk.LEFT, padx=10)
+        weighted_frame = ttk.Frame(main_frame)
+        weighted_frame.pack(fill=tk.X, pady=5)
+        ttk.Checkbutton(weighted_frame, variable=self.weighted_versions_var,
+                      text="Use Weighted Versions (realistic distribution)").pack(side=tk.LEFT, padx=10)
+
         file_frame = ttk.Frame(main_frame)
         file_frame.pack(fill=tk.X, pady=10)
         ttk.Label(file_frame, text="Count:").pack(side=tk.LEFT)
@@ -84,32 +93,53 @@ class UAGeneratorApp:
                                                                          expand=True, 
                                                                          padx=5)
 
-        # Progress Bar
         self.progress_var = tk.DoubleVar()
         ttk.Progressbar(main_frame, variable=self.progress_var, 
                       maximum=100).pack(fill=tk.X, pady=10)
 
-        # Generate Button
         ttk.Button(main_frame, text="Generate User Agents", 
                  command=self.start_generation).pack(pady=10)
 
-        # Footer
         footer = ttk.Frame(main_frame)
         footer.pack(side=tk.BOTTOM, fill=tk.X, pady=5)
         ttk.Label(footer, text="WebAdHere Technologies", font=('Tahoma', 8)).pack(side=tk.LEFT)
-        ttk.Label(footer, text="AgentX v2.0", font=('Tahoma', 8)).pack(side=tk.RIGHT)
+        ttk.Label(footer, text="AgentX v1.3", font=('Tahoma', 8)).pack(side=tk.RIGHT)
 
     def update_platform_options(self):
         for widget in self.platform_container.winfo_children():
             widget.destroy()
 
-        platforms = ['windows', 'macos', 'linux'] if self.device_var.get() == 'desktop' else ['ios', 'android']
-        for platform in platforms:
-            var = self.platform_vars[platform]
-            text = "iOS" if platform == 'ios' else platform.capitalize()
-            ttk.Checkbutton(self.platform_container, 
-                          text=text, 
-                          variable=var).pack(side=tk.LEFT, padx=5)
+        device_type = self.device_var.get()
+        
+        if device_type == 'random':
+            self.is_random = True
+            platforms = ['windows', 'macos', 'linux', 'ios', 'android']
+            for platform in platforms:
+                var = self.platform_vars[platform]
+                var.set(True) 
+                text = "iOS" if platform == 'ios' else platform.capitalize()
+                cb = ttk.Checkbutton(self.platform_container, 
+                                text=text, 
+                                variable=var,
+                                state='disabled')  
+                cb.pack(side=tk.LEFT, padx=5)
+            
+            for browser, var in self.browser_vars.items():
+                var.set(True)
+        else:
+            self.is_random = False
+            platforms = ['windows', 'macos', 'linux'] if device_type == 'desktop' else ['ios', 'android']
+            
+            other_platforms = ['ios', 'android'] if device_type == 'desktop' else ['windows', 'macos', 'linux']
+            for platform in other_platforms:
+                self.platform_vars[platform].set(False)
+            
+            for platform in platforms:
+                var = self.platform_vars[platform]
+                text = "iOS" if platform == 'ios' else platform.capitalize()
+                ttk.Checkbutton(self.platform_container, 
+                              text=text, 
+                              variable=var).pack(side=tk.LEFT, padx=5)
 
     def choose_file(self):
         path = filedialog.asksaveasfilename(
@@ -131,6 +161,11 @@ class UAGeneratorApp:
                 f'UserAgents_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
             )
 
+            if self.device_var.get() == 'random':
+                device_type = None  
+            else:
+                device_type = self.device_var.get()  
+
             platforms = tuple(p for p, var in self.platform_vars.items() if var.get())
             browsers = tuple(b for b, var in self.browser_vars.items() if var.get())
 
@@ -142,14 +177,35 @@ class UAGeneratorApp:
                 messagebox.showerror("Error", "Please select at least one browser!")
                 return
 
-            with open(filepath, 'w') as f:
+            options = Options() if self.weighted_versions_var.get() else None
+            if options:
+                options.weighted_versions = True
+            
+            with open(filepath, 'w', encoding='utf-8') as f:
                 for i in range(count):
                     ua = ua_generator.generate(
-                        device=self.device_var.get(),
+                        device=device_type,
                         platform=platforms,
-                        browser=browsers
+                        browser=browsers,
+                        options=options
                     )
-                    f.write(f"{ua}\n")
+                    
+                    if self.client_hints_var.get():
+                        ua.headers.accept_ch('Sec-CH-UA-Platform-Version, Sec-CH-UA-Full-Version-List')
+                        
+                        headers = ua.headers.get()
+                        
+                        f.write(f"User-Agent: {headers.get('user-agent')}\n")
+                        
+                        for key, value in headers.items():
+                            if key != 'user-agent': 
+                                f.write(f"{key}: {value}\n")
+                        
+                        f.write("\n") 
+                    else:
+                        ua_string = ua.headers.get().get('user-agent')
+                        f.write(f"{ua_string}\n")
+                    
                     self.progress_var.set((i+1)/count*100)
 
             messagebox.showinfo("Success", f"{count} UAs created!\nSaved to: {filepath}")
@@ -165,4 +221,4 @@ class UAGeneratorApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = UAGeneratorApp(root)
-    root.mainloop() 
+    root.mainloop()

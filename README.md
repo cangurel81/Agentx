@@ -17,18 +17,22 @@ AgentX is designed for developers, QA engineers, and cybersecurity professionals
 - ✅ **Batch Processing** – Generate thousands of UA strings at once
 - ✅ **Easy-to-Use GUI** – Simple, intuitive interface for quick generation
 - ✅ **Standalone & Portable** – No installation required
+- ✅ **Random Device Selection** – Automatically chooses device, platform, and browser
+- ✅ **Client Hints Support** – Writes all headers (UA + CH) to file when enabled
+- ✅ **Weighted Browser Versions** – Browser versions are distributed according to real traffic patterns
+
 
 ---
 
 ## 🖥️ Screenshots
 
- ![Ekran görüntüsü 2025-02-21 041925](https://github.com/user-attachments/assets/8ef1669a-89f5-4105-845b-b5e55ebe1feb)
+<img width="507" height="438" alt="Ekran görüntüsü 2025-10-26 130626" src="https://github.com/user-attachments/assets/9d3a7481-a114-4179-8507-6c3840b984b6" />
 
 ---
 
 ## ⚙️ Technical Specifications
 ### Dependencies
-Core Engine: ua-generator==2.0.1
+Core Engine: ua-generator==2.0.17
 
 GUI Framework: tkinter==0.1.0
 
@@ -56,36 +60,6 @@ Validation Library: pyOpenSSL==23.3.0
 4. **Choose Browsers & Count**
 5. **Click "Generate User Agents"**
 6. **Save & Export** your generated UA list
-
----
-
-## 📜 Version History
-
-### v2.1 - Performance & Realism Upgrade
-   - 🔄 Updated ua-generator to 2.0.1 (Major improvement in UA realism)
-   - 🚀 Performance Optimizations for faster generation
-   - 🛠 Parameter Changes:
-        platform → os
-        browser → browsers (supports multiple selections)
-    ✅ Enhanced Testing Scope:
-    -    All platform combinations
-    -    Mobile/Desktop transitions
-    -    Large-scale UA generation (10K+)
-    -    Various browser combinations
-
-### v2.0 - Major UI Overhaul
-- ✨ **Visual Enhancements**
-- 🔄 **Separated Mobile & Desktop Selection**
-
-### v1.5 - Stability Improvements
-- 🛠 **Fixed Various Bugs & Crashes**
-- 🎨 **UI Design Enhancements**
-
-### v1.0 - Initial Release
-- 🌍 **Added Device Type Selection**
-- 💾 **Save Location Selection**
-- 📊 **Progress Bar for Generation**
-- 🌍 **Added & Removed Language Support**
 
 ---
 

@@ -56,7 +56,7 @@ pip install -r requirements.txt
 ---
 
 ## 📥 Download
-- **[AgentX.exe — v1.4, 10.0 MB](https://github.com/cangurel81/AgentX-UA-Generator/releases/latest/download/AgentX.exe)** – Standalone Windows executable, Python is not required
+- **[AgentX.exe — v1.4, 10.0 MB](https://github.com/cangurel81/Agentx/releases/latest/download/AgentX.exe)** – Standalone Windows executable, Python is not required
 - **Source Code (zip/tar.gz)** – Available on GitHub
 
 > Windows SmartScreen may warn about an unsigned binary — choose **More info → Run anyway**.
@@ -71,8 +71,8 @@ pip install -r requirements.txt
 
 ### Option 2 — From source
 ```bash
-git clone https://github.com/cangurel81/AgentX-UA-Generator.git
-cd AgentX-UA-Generator
+git clone https://github.com/cangurel81/Agentx.git
+cd Agentx
 pip install -r requirements.txt
 python user_agents_gui.py
 ```

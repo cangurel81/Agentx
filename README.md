@@ -1,6 +1,6 @@
 # AgentX: Advanced User-Agent Generator 🚀
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Code Style: PEP8](https://img.shields.io/badge/code%20style-PEP8-brightgreen)](https://peps.python.org/pep-0008/)
 
@@ -20,6 +20,9 @@ AgentX is designed for developers, QA engineers, and cybersecurity professionals
 - ✅ **Random Device Selection** – Automatically chooses device, platform, and browser
 - ✅ **Client Hints Support** – Writes all headers (UA + CH) to file when enabled
 - ✅ **Weighted Browser Versions** – Browser versions are distributed according to real traffic patterns
+- ✅ **Cancelable Generation** – Stop a running job at any time; whatever was written stays on disk
+- ✅ **Live Status Bar** – Progress and result count are shown without freezing the window
+- ✅ **Thread-Safe UI** – Generation runs in a worker thread and never touches tkinter directly
 
 
 ---
@@ -32,18 +35,23 @@ AgentX is designed for developers, QA engineers, and cybersecurity professionals
 
 ## ⚙️ Technical Specifications
 ### Dependencies
-Core Engine: ua-generator==2.0.17
+Core Engine: ua-generator==2.1.9
 
-GUI Framework: tkinter==0.1.0
+GUI Framework: tkinter (bundled with Python — no pip package)
 
-Compression Support: gzip==1.12
+That is the complete dependency list. `gzip` and `pyOpenSSL` are not used by AgentX;
+earlier versions of this README listed them by mistake.
 
-Validation Library: pyOpenSSL==23.3.0
+Install with:
+```bash
+pip install -r requirements.txt
+```
 
 ### System Requirements
 - **OS**: Windows 10/11, macOS, Linux (64-bit)
+- **Python**: 3.9 or newer (required by ua-generator 2.1.9)
 - **Hardware**: Minimum 4GB RAM, 2GHz CPU
-- **Internet**: Required for real-time UA validation
+- **Internet**: Not required — User-Agents are generated locally from bundled templates
 
 ---
 
@@ -54,12 +62,29 @@ Validation Library: pyOpenSSL==23.3.0
 ---
 
 ## 🚀 Installation & Usage
+
+### Option 1 — Prebuilt executable
 1. **Download** AgentX from the releases section
 2. **Run the application** – No installation required
-3. **Select Device Type & Platform**
-4. **Choose Browsers & Count**
-5. **Click "Generate User Agents"**
-6. **Save & Export** your generated UA list
+
+### Option 2 — From source
+```bash
+git clone https://github.com/cangurel81/AgentX-UA-Generator.git
+cd AgentX-UA-Generator
+pip install -r requirements.txt
+python user_agents_gui.py
+```
+
+### Using the app
+1. **Select Device Type** – Desktop, Mobile or Random (Random enables every platform and browser)
+2. **Pick platforms and browsers** – the platform list follows the selected device type
+3. **Set the count** – 1 to 100,000 per run
+4. **Choose a save location** – if left empty, a timestamped file is written to the Desktop
+5. **Click "Generate User Agents"** – the progress bar and status line update live
+6. **Cancel** stops the job immediately; the partially written file is kept
+
+Output format: one User-Agent per line. With **Client Hints** enabled every entry becomes a
+header block (`User-Agent: ...` plus `Sec-CH-UA-*` lines) separated by a blank line.
 
 ---
 

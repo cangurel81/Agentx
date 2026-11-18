@@ -11,7 +11,7 @@ AgentX is designed for developers, QA engineers, and cybersecurity professionals
 ---
 
 ## 🔥 Features
-- ✅ **Unlimited User-Agent Generation** – Create realistic User-Agents without limits
+- ✅ **High-Volume Generation** – Up to 100,000 User-Agent strings per run
 - ✅ **Cross-Platform Support** – Generate UA strings for Windows, macOS, Linux, Android, and iOS
 - ✅ **Browser Selection** – Chrome, Edge, Firefox, and Safari support
 - ✅ **Batch Processing** – Generate thousands of UA strings at once
@@ -56,8 +56,10 @@ pip install -r requirements.txt
 ---
 
 ## 📥 Download
-- **AgentX.exe** – Standalone executable (Windows)
+- **[AgentX.exe — v1.4, 10.0 MB](https://github.com/cangurel81/AgentX-UA-Generator/releases/latest/download/AgentX.exe)** – Standalone Windows executable, Python is not required
 - **Source Code (zip/tar.gz)** – Available on GitHub
+
+> Windows SmartScreen may warn about an unsigned binary — choose **More info → Run anyway**.
 
 ---
 

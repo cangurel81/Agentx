@@ -1,12 +1,14 @@
-# AgentX: Advanced User-Agent Generator 🚀
+# AgentX — User-Agent Generator
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Code Style: PEP8](https://img.shields.io/badge/code%20style-PEP8-brightgreen)](https://peps.python.org/pep-0008/)
 
-**A powerful and efficient tool for generating unlimited, realistic User-Agents across all platforms.**
+Generates realistic User-Agent strings offline — up to 100,000 per run for Windows, macOS, Linux,
+Android and iOS, with optional Client Hints headers. Built for QA engineers and developers who need
+bulk UA lists for testing and analysis.
 
-AgentX is designed for developers, QA engineers, and cybersecurity professionals who need precise control over User-Agent strings. With its intuitive GUI and robust engine, AgentX makes it easy to generate authentic User-Agent lists for testing, analysis, and automation.
+AgentX runs entirely on your machine: no API calls, no network access, no accounts.
 
 ---
 
@@ -92,4 +94,21 @@ header block (`User-Agent: ...` plus `Sec-CH-UA-*` lines) separated by a blank l
 
 ## 💡 Support & Documentation
 For support, updates, and detailed documentation, visit **[WebAdHere Technologies](https://webadhere.com)**.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+## 🇹🇷 Türkçe
+
+**AgentX**, çevrimdışı çalışan bir User-Agent üreticisidir: Windows, macOS, Linux, Android ve iOS
+için tek çalıştırmada **100.000'e kadar** gerçekçi UA dizesi üretir; isteğe bağlı olarak Client Hints
+başlıklarını da yazar. QA ve test işleri için toplu UA listesi gerektiğinde kullanılır.
+
+- **İndirme:** [AgentX.exe](https://github.com/cangurel81/Agentx/releases/latest/download/AgentX.exe) — Python gerekmez.
+- **Kaynaktan çalıştırma:** `pip install -r requirements.txt` → `python user_agents_gui.py` (Python 3.9+).
+- **Not:** İnternet gerektirmez, tüm şablonlar uygulamanın içinde.
+- **Lisans:** MIT.
 
